@@ -31,32 +31,58 @@ For the launcher to be useful, at a minimum you will need to listen for the comp
 then do something with the options.  The example below creates a dynamic component based on the supplied options:
 
 ```
+/* eslint-env node */
+"use strict";
+var fluid = require("infusion");
+var my = fluid.registerNamespace("my");
+fluid.require("%gpii-launcher");
+
+fluid.defaults("my.launcher.worker", {
+    gradeNames: ["fluid.component"],
+    var1:    "set in the component",
+    listeners: {
+        "onCreate.log": {
+            funcName: "console.log",
+            args: ["Var 1:", "{that}.options.var1"]
+        }
+    }
+});
+
 fluid.registerNamespace("my.launcher");
 
-my.launcher.launch = function (that, pasedOptions) {
-    var options = that.options.defaultComponentOptions;
-    fluid.merge(null, options, passedOptions);
-    fluid.construct(that.options.componentPath, options);
+my.launcher.launchWorker = function (that, passedOptions) {
+    fluid.construct(that.options.componentPath, { type: "fluid.component", components: { innerComponent: { type: "my.launcher.worker", options: passedOptions }} });
 };
 
 fluid.defaults("my.launcher", {
     gradeNames: ["gpii.launcher"],
     componentPath: "my_dynamic_component",
-    mergePolicy: {
-        defaultComponentOptions: "nomerge, noexpand"
-    },
-    defaultComponentOptions: {
-        gradeNames: ["fluid.component"],
-        listeners: {
-            "onCreate.logOptions": {
-                funcName: "fluid.log",
-                args: ["My final options are:", "@expand:JSON.stringify({that}.options, null, 2)"]
-            }
+    yargsOptions: {
+        describe: {
+            "var1": "you can set this option"
         }
-
-    }
-    events: {
-        onOptionsMerged: null
+    },
+    listeners: {
+        "onOptionsMerged.launchWorker": {
+            funcName: "my.launcher.launchWorker",
+            args:     ["{that}", "{arguments}.0"]
+        }
     }
 });
+
+my.launcher();
+```
+
+This script is included in the `examples` directory of this package, Here are some examples of the expected output when running the above on a UNIX-like system:
+
+```
+$ node examples/my-launcher.js --var1 "set from the command line"
+Var 1: set from the command line
+
+$ var1="set from an environment variable" node examples/my-launcher.js
+Var 1: set from an environment variable
+
+$ node examples/my-launcher.js --optionsFile %gpii-launcher/tests/data/optionsFile.json
+Var 1: set from an options file
+
 ```

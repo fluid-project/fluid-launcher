@@ -22,7 +22,6 @@ gpii.tests.launcher.worker.saveToFile = function (options) {
 fluid.defaults("gpii.tests.launcher.worker", {
     gradeNames: ["fluid.component"],
     var1: "set in the component",
-    privateOption: true,
     listeners: {
         "onCreate.saveToFile": {
             funcName: "gpii.tests.launcher.worker.saveToFile",
