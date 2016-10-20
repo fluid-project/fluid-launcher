@@ -1,0 +1,35 @@
+{
+  "name": "gpii-launcher",
+  "version": "1.0.0",
+  "description": "A launcher that merges options from the command line, environment, options files with the launcher defaults.",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "node_modules/rimraf/bin.js coverage/*",
+    "test": "istanbul cover --report none --print none --include-pid tests/js/all-tests.js",
+    "posttest": "istanbul report --root coverage --dir reports lcov text-summary"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GPII/gpii-launcher.git"
+  },
+  "author": "Tony Atkins <tony@raisingthefloor.org>",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://issues.gpii.net/browse/GPII"
+  },
+  "homepage": "https://github.com/GPII/gpii-launcher/",
+  "dependencies": {
+    "infusion": "2.0.0-dev.20161002T002156Z.a2802df",
+    "istanbul": "^0.4.5",
+    "yargs": "6.0.0"
+  },
+  "devDependencies": {
+    "eslint": "3.5.0",
+    "fluid-grunt-eslint": "18.1.2",
+    "grunt": "1.0.1",
+    "grunt-jsonlint": "1.1.0",
+    "jsonlint": "1.6.2",
+    "node-jqunit": "1.1.4",
+    "rimraf": "^2.5.4"
+  }
+}
