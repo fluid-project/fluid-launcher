@@ -24,6 +24,7 @@ gpii.tests.launcher.runSingleTest = function (that, testDef) {
         var command = fluid.stringTemplate("node %istanbulPath cover --print none --report none --include-pid --dir %coverageOutputDir %launcherPath -- %args --outputFile %outputFile", commandOptions);
 
         var execOptions = {
+            cwd: fluid.module.resolvePath("%gpii-launcher"),
             env: testDef.env || {}
         };
 
@@ -53,8 +54,23 @@ fluid.defaults("gpii.tests.launcher.testRunner", {
             expected: { var1: "environment variable" }
         },
         {
-            message: "Options should be loaded correctly from an options file...",
+            message: "Options should be loaded correctly from an options file (full path)...",
             args: "--optionsFile " + optionsFile,
+            expected: { "var1": "set from an options file" }
+        },
+        {
+            message: "Options should be loaded correctly from an options file (relative path)...",
+            args: "--optionsFile tests/data/optionsFile.json",
+            expected: { "var1": "set from an options file" }
+        },
+        {
+            message: "Options should be loaded correctly from an options file (package-relative path)...",
+            args: "--optionsFile %gpii-launcher/tests/data/optionsFile.json",
+            expected: { "var1": "set from an options file" }
+        },
+        {
+            message: "Options should be loaded correctly from an options file (environment variable)...",
+            env: { optionsFile: "%gpii-launcher/tests/data/optionsFile.json"},
             expected: { "var1": "set from an options file" }
         },
         {

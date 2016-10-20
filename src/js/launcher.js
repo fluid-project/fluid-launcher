@@ -3,7 +3,9 @@
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
-var yargs = require("yargs");
+var yargs   = require("yargs");
+var path    = require("path");
+var process = require("process");
 
 fluid.registerNamespace("gpii.launcher");
 
@@ -35,7 +37,8 @@ gpii.launcher.filterKeys = function (includeKeys, excludeKeys, objectToFilter) {
 };
 
 gpii.launcher.loadFileOptions = function (filePath) {
-    return require(fluid.module.resolvePath(filePath));
+    var fullPath = path.resolve(process.cwd(), fluid.module.resolvePath(filePath));
+    return require(fullPath);
 };
 
 fluid.defaults("gpii.launcher", {

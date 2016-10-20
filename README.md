@@ -14,11 +14,18 @@ The launcher component uses yargs to generate a set of merged options that refle
 
 ## Component Options
 
+| Option          | Type       | Description |
+| --------------- | ---------- | ----------- |
+| `excludeKeys`   | `{Array}`  | The keys to exclude from the final merged options.  Defaults to `["optionsFile"]`, which strips the built-in `optionsFile` paramter (see below) from the output.|
+| `includeKeys`   | `{Array}`  | The keys to include in the final merged options.  Defaults to `Object.keys(that.options.yargsOptions.describe)`, so that all of the properties yargs is aware of are passed through to the merged options. |
+| `yargsOptions`  | `{Object}` | A map of yargs function names ([see their docs](http://yargs.js.org/docs/)) and arguments to pass to the function.  See below for examples. |
+
 ## The `optionsFile` parameter
 
 The launcher supports an implicit `optionsFile` parameter, which allows you to load one or more options from a JSON
-file.  You are expected to supply a single path, which must either be a full filesystem path, or a package-relative path
-that can be parsed by [`fluid.module.resolvePath`](http://docs.fluidproject.org/infusion/development/NodeAPI.html#fluid-module-resolvepath-path-)
+file.  You are expected to supply a single path, which must either be a path relative to the working directory, a full
+filesystem path, or a package-relative path that can be parsed by
+[`fluid.module.resolvePath`](http://docs.fluidproject.org/infusion/development/NodeAPI.html#fluid-module-resolvepath-path-)
 (_%package/path/to/file.json_, for example).  You can set this using either an environment variable or a command-line
 parameter.
 
