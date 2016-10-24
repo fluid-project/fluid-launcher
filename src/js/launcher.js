@@ -1,7 +1,10 @@
 /* eslint-env node */
 "use strict";
-var fluid = require("infusion");
-var gpii  = fluid.registerNamespace("gpii");
+var fluid  = require("infusion");
+var gpii   = fluid.registerNamespace("gpii");
+var kettle = fluid.registerNamespace("kettle");
+
+fluid.require("%kettle/lib/KettleConfigLoader.js");
 
 var yargs   = require("yargs");
 var path    = require("path");
@@ -20,21 +23,21 @@ fluid.registerNamespace("gpii.launcher");
  * @param that - The `gpii.launcher` component itself.
  *
  */
-gpii.launcher.mergeOptions = function (that) {
+gpii.launcher.launchComponent = function (that) {
     fluid.each(that.options.yargsOptions, function (fnArgs, fnName) {
         yargs[fnName].apply(yargs, fluid.makeArray(fnArgs));
     });
 
     var args = yargs.argv;
 
-    var options = that.filterKeys(args);
+    var paramAndEnvironmentOptions = that.filterKeys(args);
 
-    if (args.optionsFile) {
-        var optionsFileOptions = that.filterKeys(gpii.launcher.loadFileOptions(args.optionsFile));
-        options = fluid.merge(null, optionsFileOptions, options);
-    }
+    var fullPath   = gpii.launcher.resolvePath (args.optionsFile);
+    var configPath = path.dirname(fullPath);
+    var configName = path.basename(fullPath, ".json");
+    var componentName = kettle.config.createDefaults({ configPath: configPath, configName: configName });
 
-    that.events.onOptionsMerged.fire(options);
+    return fluid.invokeGlobalFunction(componentName, [paramAndEnvironmentOptions]);
 };
 
 /**
@@ -69,19 +72,6 @@ gpii.launcher.resolvePath = function (pathToResolve) {
     return path.resolve(process.cwd(), fluid.module.resolvePath(pathToResolve));
 };
 
-/**
- *
- * Load a JSON options file from `filePath`.
- *
- * @param filePath {String} - A full, cwd-relative, or package-relative path to an options file.
- * @returns {Object} - The object represented by the JSON file.
- *
- */
-gpii.launcher.loadFileOptions = function (filePath) {
-    var fullPath = gpii.launcher.resolvePath(filePath);
-    return require(fullPath);
-};
-
 fluid.defaults("gpii.launcher", {
     gradeNames: ["fluid.component"],
     includeKeys: "@expand:Object.keys({that}.options.yargsOptions.describe)",
@@ -89,16 +79,14 @@ fluid.defaults("gpii.launcher", {
     yargsOptions: {
         usage: "Usage $0 [options]",
         env: true,
+        demand: ["optionsFile"],
         describe: {
             "optionsFile": "A file to load configuration options from."
         }
     },
-    events: {
-        onOptionsMerged: null
-    },
     listeners: {
-        "onCreate.run": {
-            funcName: "gpii.launcher.mergeOptions",
+        "onCreate.launchComponent": {
+            funcName: "gpii.launcher.launchComponent",
             args:     ["{that}"]
         }
     },
@@ -109,4 +97,3 @@ fluid.defaults("gpii.launcher", {
         }
     }
 });
-

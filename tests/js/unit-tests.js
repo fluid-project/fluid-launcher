@@ -3,8 +3,6 @@
 var fluid  = require("infusion");
 var gpii   = fluid.registerNamespace("gpii");
 
-var path = require("path");
-
 require("../../");
 
 var jqUnit = require("node-jqunit");
@@ -20,12 +18,4 @@ jqUnit.test("Test key filtering...", function () {
 
     jqUnit.assertDeepEq("Includes and excludes should work in combination...", { a: "b"}, gpii.launcher.filterKeys(["a", "c"], ["c"], { a: "b", c: "d", e: "f"}));
 
-});
-
-jqUnit.test("Test file loading...", function () {
-    var expected = require("../data/optionsFile.json");
-
-    jqUnit.assertDeepEq("We should be able to load file content using a full path...", expected, gpii.launcher.loadFileOptions(path.resolve(__dirname, "../data/optionsFile.json")));
-
-    jqUnit.assertDeepEq("We should be able to load file content using a package-relative path...", expected, gpii.launcher.loadFileOptions("%gpii-launcher/tests/data/optionsFile.json"));
 });

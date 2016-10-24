@@ -1,0 +1,6 @@
+{
+  "type": "workerDefaults",
+  "options": {
+    "gradeNames": ["gpii.tests.launcher.worker"]
+  }
+}
