@@ -10,7 +10,7 @@ var child_process     = require("child_process");
 var istanbulPath      = fluid.module.resolvePath("%gpii-launcher/node_modules/istanbul/lib/cli.js");
 var launcherPath      = fluid.module.resolvePath("%gpii-launcher/tests/js/lib/harness.js");
 var coverageOutputDir = fluid.module.resolvePath("%gpii-launcher/coverage");
-var optionsFile       = fluid.module.resolvePath("%gpii-launcher/tests/data/optionsFile.json");
+var optionsFile       = fluid.module.resolvePath("%gpii-launcher/tests/data/workerCustomOptions.json");
 
 fluid.registerNamespace("gpii.tests.launcher");
 
@@ -56,22 +56,22 @@ fluid.defaults("gpii.tests.launcher.testRunner", {
         {
             message: "Options should be loaded correctly from an options file (full path)...",
             args: "--optionsFile " + optionsFile,
-            expected: { "var1": "set from an options file" }
+            expected: { "var1": "Set from a custom options file." }
         },
         {
             message: "Options should be loaded correctly from an options file (relative path)...",
-            args: "--optionsFile tests/data/optionsFile.json",
-            expected: { "var1": "set from an options file" }
+            args: "--optionsFile tests/data/workerCustomOptions.json",
+            expected: { "var1": "Set from a custom options file." }
         },
         {
             message: "Options should be loaded correctly from an options file (package-relative path)...",
-            args: "--optionsFile %gpii-launcher/tests/data/optionsFile.json",
-            expected: { "var1": "set from an options file" }
+            args: "--optionsFile %gpii-launcher/tests/data/workerCustomOptions.json",
+            expected: { "var1": "Set from a custom options file." }
         },
         {
             message: "Options should be loaded correctly from an options file (environment variable)...",
-            env: { optionsFile: "%gpii-launcher/tests/data/optionsFile.json"},
-            expected: { "var1": "set from an options file" }
+            env: { optionsFile: "%gpii-launcher/tests/data/workerCustomOptions.json"},
+            expected: { "var1": "Set from a custom options file." }
         },
         {
             message: "A command line parameter should take precedence over an environment variable...",
@@ -109,4 +109,5 @@ fluid.defaults("gpii.tests.launcher.testRunner", {
         }
     }
 });
+
 gpii.tests.launcher.testRunner();

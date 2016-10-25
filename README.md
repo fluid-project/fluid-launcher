@@ -1,7 +1,7 @@
 # gpii-launcher
 
 This package provides a `gpii.launcher` [Fluid component](http://docs.fluidproject.org/infusion/development/UnderstandingInfusionComponents.html)
-that standardizes the launching of fluid components with custom options.  The component is based on [yargs](http://yargs.js.org/).
+that standardizes the launching of fluid components with custom options.  The component is based on [yargs](http://yargs.js.org/) and [Kettle](https://github.com/fluid-project/kettle).
 
 # `gpii.launcher`
 
@@ -11,6 +11,8 @@ The launcher component uses yargs to generate a set of merged options that refle
 2. The value of environment variables.
 3. Options configured using the `optionsFile` parameter (see below).
 4. The defaults configured using `options.yargsOptions` (see below).
+
+A component will be launched with the merged options.
 
 ## Component Options
 
@@ -29,18 +31,23 @@ filesystem path, or a package-relative path that can be parsed by
 (_%package/path/to/file.json_, for example).  You can set this using either an environment variable or a command-line
 parameter.
 
-Note that as with command-line arguments and environment variables, the options supplied will be filtered using
-`options.includeKeys` and `options.excludeKeys` (see above).
+The contents of this file will be loaded using the [configuration loading built into kettle](https://github.com/fluid-project/kettle/blob/master/docs/ConfigsAndApplications.md).  The file
+is expected to correspond roughly to a component definition, but supports additional options for including other configuration files.  See [the kettle documentation](https://github.com/fluid-project/kettle/blob/master/docs/ConfigsAndApplications.md#structure-of-a-kettle-config
+) for more details.
+
 
 # Example Usage
 
-For the launcher to be useful, at a minimum you will need to listen for the component's `onOptionsMerged` event, and
-then do something with the options.  The example below creates a dynamic component based on the supplied options:
+To use the launcher, you need to define and launch a gpii.launcher instance, as in the example included with this package.
+
+
 
 ```
 /* eslint-env node */
 "use strict";
 var fluid = require("infusion");
+fluid.setLogging(true);
+
 var my = fluid.registerNamespace("my");
 fluid.require("%gpii-launcher");
 
@@ -49,30 +56,26 @@ fluid.defaults("my.launcher.worker", {
     var1:    "set in the component",
     listeners: {
         "onCreate.log": {
-            funcName: "console.log",
+            funcName: "fluid.log",
             args: ["Var 1:", "{that}.options.var1"]
+        },
+        "onCreate.destroy": {
+            func: "{that}.destroy",
+            priority: "after:log"
         }
     }
 });
 
 fluid.registerNamespace("my.launcher");
 
-my.launcher.launchWorker = function (that, passedOptions) {
-    fluid.construct(that.options.componentPath, { type: "fluid.component", components: { innerComponent: { type: "my.launcher.worker", options: passedOptions }} });
-};
-
 fluid.defaults("my.launcher", {
     gradeNames: ["gpii.launcher"],
-    componentPath: "my_dynamic_component",
     yargsOptions: {
         describe: {
             "var1": "you can set this option"
-        }
-    },
-    listeners: {
-        "onOptionsMerged.launchWorker": {
-            funcName: "my.launcher.launchWorker",
-            args:     ["{that}", "{arguments}.0"]
+        },
+        defaults: {
+            "optionsFile": "%gpii-launcher/examples/my-launcher-config.json"
         }
     }
 });
@@ -80,16 +83,31 @@ fluid.defaults("my.launcher", {
 my.launcher();
 ```
 
-This script is included in the `examples` directory of this package, Here are some examples of the expected output when running the above on a UNIX-like system:
+The defaults are configured to load a sample configuration file:
 
 ```
-$ node examples/my-launcher.js --var1 "set from the command line"
-Var 1: set from the command line
+{
+  "type": "launcherConfig",
+  "options": {
+    "gradeNames": ["my.launcher.worker"],
+    "var1": "set in the options file."
+  }
+}
+```
 
-$ var1="set from an environment variable" node examples/my-launcher.js
-Var 1: set from an environment variable
+Here are some examples of using various combinations of command-line parameters and environment variables on a UNIX-like system:
 
-$ node examples/my-launcher.js --optionsFile %gpii-launcher/tests/data/optionsFile.json
-Var 1: set from an options file
+```
+$ node examples/my-launcher.js
+Var 1: Set in the options file.
+
+$ node examples/my-launcher.js --var1 "Set from the command line."
+Var 1: Set from the command line.
+
+$ var1="Set by an environment variable." node examples/my-launcher.js
+Var 1: Set by an environment variable
+
+$ node examples/my-launcher.js --optionsFile "%gpii-launcher/examples/my-alternate-launcher-config.json"
+Var 1: Set in the alternate options file.
 
 ```

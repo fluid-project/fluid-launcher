@@ -20,7 +20,8 @@
   "homepage": "https://github.com/GPII/gpii-launcher/",
   "dependencies": {
     "infusion": "2.0.0-dev.20161002T002156Z.a2802df",
-    "istanbul": "^0.4.5",
+    "istanbul": "0.4.5",
+    "kettle": "1.1.0",
     "yargs": "6.0.0"
   },
   "devDependencies": {
@@ -30,6 +31,6 @@
     "grunt-jsonlint": "1.1.0",
     "jsonlint": "1.6.2",
     "node-jqunit": "1.1.4",
-    "rimraf": "^2.5.4"
+    "rimraf": "2.5.4"
   }
 }
