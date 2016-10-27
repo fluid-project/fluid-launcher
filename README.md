@@ -1,7 +1,7 @@
 # gpii-launcher
 
 This package provides a `gpii.launcher` [Fluid component](http://docs.fluidproject.org/infusion/development/UnderstandingInfusionComponents.html)
-that standardizes the launching of fluid components with custom options.  The component is based on [yargs](http://yargs.js.org/) and [Kettle](https://github.com/fluid-project/kettle).
+that standardizes the launching of Fluid components with custom options.  The component is based on [yargs](http://yargs.js.org/) and [Kettle](https://github.com/fluid-project/kettle).
 
 # `gpii.launcher`
 
