@@ -37,7 +37,7 @@ gpii.tests.launcher.runSingleTest = function (that, testDef) {
                 jqUnit.assertLeftHand(testDef.message + " (output check)", testDef.expected, require(outputFile));
             }
         });
-    })
+    });
 };
 
 fluid.defaults("gpii.tests.launcher.testRunner", {
