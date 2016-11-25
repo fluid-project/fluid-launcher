@@ -1,5 +1,4 @@
 // Tests that launch the launcher with various options, while collecting istanbul code coverage reporting.
-/* eslint-env node */
 "use strict";
 var fluid             = require("infusion");
 var gpii              = fluid.registerNamespace("gpii");
