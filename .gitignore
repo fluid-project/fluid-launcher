@@ -1,5 +1,4 @@
 node_modules
 .idea/
 coverage
-yarn.lock
 reports
