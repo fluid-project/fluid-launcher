@@ -78,6 +78,7 @@ fluid.defaults("gpii.launcher", {
     yargsOptions: {
         usage: "Usage $0 [options]",
         env: true,
+        demand: ["optionsFile"],
         describe: {
             "optionsFile": "A file to load configuration options from."
         }
