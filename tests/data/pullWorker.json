@@ -1,0 +1,7 @@
+{
+  "type": "workerPullingOptions",
+  "options": {
+    "gradeNames": ["gpii.tests.launcher.worker"],
+    "envVar1":    "{gpii.launcher.resolver}.env.var1"
+  }
+}

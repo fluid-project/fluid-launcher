@@ -12,7 +12,7 @@ fluid.defaults("my.launcher.worker", {
     listeners: {
         "onCreate.log": {
             funcName: "fluid.log",
-            args: ["Var 1:", "{that}.options.var1"]
+            args: ["Options:", "@expand:JSON.stringify({that}.options, null, 2)"]
         },
         "onCreate.destroy": {
             func: "{that}.destroy",
@@ -25,6 +25,7 @@ fluid.registerNamespace("my.launcher");
 
 fluid.defaults("my.launcher", {
     gradeNames: ["gpii.launcher"],
+    filterKeys: false,
     yargsOptions: {
         describe: {
             "var1": "you can set this option"

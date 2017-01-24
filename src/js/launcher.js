@@ -9,6 +9,20 @@ var yargs   = require("yargs");
 var path    = require("path");
 var process = require("process");
 
+// A global resolver that can be used to pull raw environment variables from configuration blocks.
+fluid.defaults("gpii.launcher.resolver", {
+    gradeNames: ["fluid.component", "fluid.resolveRootSingle"],
+    singleRootType: "gpii.launcher.resolver",
+    members: {
+        env:  process.env
+    }
+});
+
+// Create an instance of gpii.resolvers.env
+fluid.construct("gpii_launcher_resolver", {
+    type: "gpii.launcher.resolver"
+});
+
 fluid.registerNamespace("gpii.launcher");
 
 /**
@@ -27,9 +41,10 @@ gpii.launcher.launchComponent = function (that) {
         yargs[fnName].apply(yargs, fluid.makeArray(fnArgs));
     });
 
-    var args = yargs.argv;
+    var args = fluid.copy(yargs.argv);
+    yargs.reset();
 
-    var paramAndEnvironmentOptions = that.filterKeys(args);
+    var paramAndEnvironmentOptions = that.options.filterKeys ? that.filterKeys(args) : args;
 
     var fullPath   = gpii.launcher.resolvePath (args.optionsFile);
     var configPath = path.dirname(fullPath);
@@ -73,15 +88,17 @@ gpii.launcher.resolvePath = function (pathToResolve) {
 
 fluid.defaults("gpii.launcher", {
     gradeNames: ["fluid.component"],
+    filterKeys:  true,
     includeKeys: "@expand:Object.keys({that}.options.yargsOptions.describe)",
     excludeKeys: ["optionsFile"],
     yargsOptions: {
-        usage: "Usage $0 [options]",
-        env: true,
-        demand: ["optionsFile"],
+        env: true, // Parse environment variables
+        demandOption: ["optionsFile"], // Which arguments are required.
         describe: {
             "optionsFile": "A file to load configuration options from."
-        }
+        },
+        help: true, // Provide a `--help` option that displays our usage information.
+        usage: "Usage $0 [options]" // Display a "usage" message if args are missing or incorrect.
     },
     listeners: {
         "onCreate.launchComponent": {

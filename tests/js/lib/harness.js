@@ -3,12 +3,11 @@
 */
 "use strict";
 var fluid = require("infusion");
-fluid.setLogging(true);
 
 var gpii  = fluid.registerNamespace("gpii");
 var fs    = require("fs");
 
-require("../../../");
+fluid.require("%gpii-launcher");
 
 fluid.registerNamespace("gpii.tests.launcher.worker");
 
@@ -50,5 +49,3 @@ fluid.defaults("gpii.tests.launcher.harness", {
         }
     }
 });
-
-gpii.tests.launcher.harness();
