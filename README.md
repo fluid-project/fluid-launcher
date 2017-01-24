@@ -190,7 +190,7 @@ from a configuration file.
 # Pulling Environment Variables by Reference
 
 The previous examples covered "pushing" options information through from arguments or environment variables.  It is
-also possible to explicitly reference environment variables and arguments from an options block, as shown in this 
+also possible to explicitly "pull" environment variables and arguments from an options block, as shown in this
 sample configuration file:
 
 ```
