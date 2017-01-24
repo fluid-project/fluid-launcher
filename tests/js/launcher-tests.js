@@ -31,7 +31,7 @@ gpii.tests.launcher.runSingleTest = function (that, testDef) {
         child_process.exec(command, execOptions, function (error) {
             jqUnit.start();
             if (error) {
-                jqUnit.assertUndefined(testDef.message + " (error check)", error);
+                jqUnit.fail(testDef.message + " (error check):" + error);
             }
             else {
                 jqUnit.assertLeftHand(testDef.message + " (output check)", testDef.expected, require(outputFile));
