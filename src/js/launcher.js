@@ -46,7 +46,7 @@ gpii.launcher.launchComponent = function (that) {
 
     var paramAndEnvironmentOptions = that.options.filterKeys ? that.filterKeys(args) : args;
 
-    var fullPath   = gpii.launcher.resolvePath (args.optionsFile);
+    var fullPath   = gpii.launcher.resolvePath(args.optionsFile);
     var configPath = path.dirname(fullPath);
     var configName = path.basename(fullPath, ".json");
     var componentName = kettle.config.createDefaults({ configPath: configPath, configName: configName });
