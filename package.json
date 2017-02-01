@@ -4,7 +4,7 @@
   "description": "A launcher that merges options from the command line, environment, options files with the launcher defaults.",
   "main": "index.js",
   "scripts": {
-    "pretest": "node_modules/rimraf/bin.js coverage/*",
+    "pretest": "node node_modules/rimraf/bin.js coverage/*",
     "test": "istanbul cover --report none --print none --include-pid tests/js/all-tests.js",
     "posttest": "istanbul report --root coverage --dir reports lcov text-summary",
     "postinstall": "npm link"
