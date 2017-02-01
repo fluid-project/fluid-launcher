@@ -120,6 +120,12 @@ fluid.defaults("gpii.tests.launcher.testRunner", {
         {
             message: "Launching a file with no command line parameters or environment variables should also be safe...",
             expected: { "var1": "set in the component" }
+        },
+        {
+            message:      "The standalone `wrapper` launcher should be able to load a config with arguments....",
+            launcherPath: "%gpii-launcher/src/js/wrapper.js",
+            args: "--optionsFile %gpii-launcher/tests/data/workerCustomOptions.json",
+            expected: { "var1": "Set from a custom options file." }
         }
     ],
     invokers: {

@@ -49,8 +49,10 @@ gpii.launcher.launchComponent = function (that) {
     var fullPath   = gpii.launcher.resolvePath(args.optionsFile);
     var configPath = path.dirname(fullPath);
     var configName = path.basename(fullPath, ".json");
-    var componentName = kettle.config.createDefaults({ configPath: configPath, configName: configName });
 
+    // TODO: guard against missing dependencies, which will otherwise result in the creation of empty components.
+    // See: https://issues.fluidproject.org/browse/FLUID-6123
+    var componentName = kettle.config.createDefaults({ configPath: configPath, configName: configName });
     return fluid.invokeGlobalFunction(componentName, [paramAndEnvironmentOptions]);
 };
 
@@ -87,20 +89,30 @@ gpii.launcher.resolvePath = function (pathToResolve) {
 };
 
 fluid.defaults("gpii.launcher", {
-    gradeNames: ["fluid.component"],
+    gradeNames:  ["fluid.component"],
     filterKeys:  true,
+    logLevel:    true,
     includeKeys: "@expand:Object.keys({that}.options.yargsOptions.describe)",
     excludeKeys: ["optionsFile"],
     yargsOptions: {
         env: true, // Parse environment variables
         demandOption: ["optionsFile"], // Which arguments are required.
         describe: {
-            "optionsFile": "A file to load configuration options from."
+            "optionsFile": "A file to load configuration options from.",
+            "logLevel": "The Fluid log level to set before launch."
+        },
+        coerce: {
+            "logLevel": "{that}.expand"
         },
         help: true, // Provide a `--help` option that displays our usage information.
         usage: "Usage $0 [options]" // Display a "usage" message if args are missing or incorrect.
     },
     listeners: {
+        "onCreate.setLogging": {
+            priority: "first",
+            funcName: "fluid.setLogging",
+            args:     ["{that}.options.logLevel"]
+        },
         "onCreate.launchComponent": {
             funcName: "gpii.launcher.launchComponent",
             args:     ["{that}"]
@@ -110,6 +122,10 @@ fluid.defaults("gpii.launcher", {
         filterKeys: {
             funcName: "gpii.launcher.filterKeys",
             args: ["{that}.options.includeKeys", "{that}.options.excludeKeys", "{arguments}.0"]
+        },
+        expand: {
+            funcName: "fluid.expand",
+            args:     ["{arguments}.0", "{that}"]
         }
     }
 });
