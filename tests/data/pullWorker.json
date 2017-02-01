@@ -3,5 +3,6 @@
   "options": {
     "gradeNames": ["gpii.tests.launcher.worker"],
     "envVar1":    "{gpii.launcher.resolver}.env.var1"
-  }
+  },
+  "mergeConfigs": ["%gpii-launcher/tests/data/workerDefaults.json"]
 }

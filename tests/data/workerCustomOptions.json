@@ -4,5 +4,6 @@
     "gradeNames": ["gpii.tests.launcher.worker"],
     "var1": "Set from a custom options file.",
     "additionalOption": true
-  }
+  },
+  "mergeConfigs": ["%gpii-launcher/tests/data/workerDefaults.json"]
 }

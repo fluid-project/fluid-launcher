@@ -2,5 +2,6 @@
   "type": "workerDefaults",
   "options": {
     "gradeNames": ["gpii.tests.launcher.worker"]
-  }
+  },
+  "require": ["%gpii-launcher/tests/js/lib/worker.js"]
 }
