@@ -26,7 +26,7 @@ Once the options have been constructed, a component will be launched with the me
 
 ## The `yargsOptions` option
 
-To give you an example of how `yargsOptions` can be used, here ar the defaults provided by the base `gpii.launcher`
+To give you an example of how `yargsOptions` can be used, here are the defaults provided by the base `gpii.launcher`
 grade:
 
 ```
@@ -122,11 +122,11 @@ In this example, we set a default for `optionsFile`, which is used to load a sam
 
 ```
 {
-  "type": "launcherConfig",
-  "options": {
-    "gradeNames": ["my.launcher.worker"],
-    "var1": "set in the options file."
-  }
+    "type": "launcherConfig",
+    "options": {
+        "gradeNames": ["my.launcher.worker"],
+        "var1": "set in the options file."
+    }
 }
 ```
 
