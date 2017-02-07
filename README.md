@@ -72,9 +72,22 @@ is expected to correspond roughly to a component definition, but supports additi
 ) for more details.
 
 
-# Example Usage
+# Using the global launcher
 
-To use the launcher, you need to define and launch a `gpii.launcher` instance, as in the example included with this package.
+This package includes a generic launcher that can be used to load any options file (see above) directly.  When using
+this package as a dependency, this script is available under `node_modules/.bin/gpii-launcher`.  You can also install
+this package globally, in which case the `gpii-launcher` command will be available in your path.
+
+The generic launcher supports the two core options provided by the base `gpii.launcher` grade, namely the `optionsFile`
+parameter (see above) and a `logLevel` parameter that you can use to toggle logging.  The generic launcher allows you to
+set any arbitrary option (see the `filterKeys` option above).  However, it only accepts command-line arguments (see the
+`yargsOptions.env` example above).
+
+
+# Creating a custom launcher
+
+If you wish to make use of the wider range of yargs features supported by this package, you need to define and launch a
+`gpii.launcher` instance, as in the example included with this package.
 
 
 ```
