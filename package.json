@@ -6,12 +6,9 @@
   "scripts": {
     "pretest": "node node_modules/rimraf/bin.js coverage/*",
     "test": "istanbul cover --report none --print none --include-pid tests/js/all-tests.js",
-    "posttest": "istanbul report --root coverage --dir reports lcov text-summary",
-    "postinstall": "npm link"
+    "posttest": "istanbul report --root coverage --dir reports lcov text-summary"
   },
-  "bin": {
-    "gpii-launcher": "./src/js/wrapper.js"
-  },
+  "bin": "./src/js/wrapper.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GPII/gpii-launcher.git"
