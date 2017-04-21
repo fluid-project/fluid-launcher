@@ -22,7 +22,7 @@
   "dependencies": {
     "infusion": "3.0.0-dev.20170322T234120Z.278de35",
     "istanbul": "0.4.5",
-    "kettle": "git://github.com/the-t-in-rtf/kettle#ae8462ae9f7169db72de89d6bbe0f7b1a12da657",
+    "kettle": "1.4.1",
     "yargs": "7.1.0"
   },
   "devDependencies": {
