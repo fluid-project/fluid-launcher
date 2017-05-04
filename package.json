@@ -22,7 +22,7 @@
   "dependencies": {
     "infusion": "3.0.0-dev.20170322T234120Z.278de35",
     "istanbul": "0.4.5",
-    "kettle": "1.4.1",
+    "kettle": "1.5.0",
     "yargs": "7.1.0"
   },
   "devDependencies": {
