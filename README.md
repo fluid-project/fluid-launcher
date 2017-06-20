@@ -47,14 +47,14 @@ argument or environment variable (`env: true`).
 For full documentation on all available functions and arguments, see [the yargs documentation](http://yargs.js.org/docs/).
 
 
-## The `optionsFile` parameter
+## The `optionsFile` parameter and configuration file format
 
 The launcher supports an implicit `optionsFile` parameter, which allows you to load one or more options from a JSON
 file.  You are expected to supply a single path, which must either be a path relative to the working directory, a full
 filesystem path, or a package-relative path that can be parsed by
 [`fluid.module.resolvePath`](http://docs.fluidproject.org/infusion/development/NodeAPI.html#fluid-module-resolvepath-path-)
-(_%package/path/to/file.json_, for example).  You can set this using an environment variable, a command line
-parameter, or by specifying it in the defaults, as in:
+(for example, `%package/path/to/file.json`).  You can set the `optionsFile` option using an environment variable, a
+command line parameter, or by specifying it in the defaults, as in:
 
 ```
 fluid.defaults("my.launcher", {
@@ -67,9 +67,21 @@ fluid.defaults("my.launcher", {
 });
 ```
 
-The contents of this file will be loaded using the [configuration loading built into kettle](https://github.com/fluid-project/kettle/blob/master/docs/ConfigsAndApplications.md).  The file
-is expected to correspond roughly to a component definition, but supports additional options for including other configuration files.  See [the kettle documentation](https://github.com/fluid-project/kettle/blob/master/docs/ConfigsAndApplications.md#structure-of-a-kettle-config
-) for more details.
+The contents of this file will be loaded using the [configuration loading built into kettle](https://github.com/fluid-project/kettle/blob/master/docs/ConfigsAndApplications.md).
+The file is expected to correspond roughly to a component definition, but supports additional options for including
+other configuration files.
+
+In general, the config file format is a superset of a normal [subcomponent definition](http://docs.fluidproject.org/infusion/development/SubcomponentDeclaration.html).
+As with subcomponents,  you are expected to enclose the component options in an `options` keyword.  Although a
+subcomponent definition requires a `type` field, in the case of a configuration file `type` is optional, but should be 
+filled in with a unique name (for example, the name of the configuration file minus the extension).  The `type` will
+be a part of the constructed grade name, and will appear in log messages, so a unique name helps make it clear which
+options are being used for a given launch.  If `type` is omitted, it will be replace with a generated ID, which makes
+troubleshooting more difficult.
+
+See [the kettle documentation](https://github.com/fluid-project/kettle/blob/master/docs/ConfigsAndApplications.md#structure-of-a-kettle-config
+) for more details about the configuration file format, including the special keywords that support merging material
+from other configuration files.
 
 
 # Using the global launcher
@@ -131,6 +143,10 @@ fluid.defaults("my.launcher", {
 my.launcher();
 ```
 
+Note that we have defined a component grade `my.launcher.worker`, which is visible from our launch file.  We could also
+have defined a grade in an external file, but we must require that file from the launcher file itself, so that it is
+defined when we try to instantiate the component.
+
 In this example, we set a default for `optionsFile`, which is used to load a sample configuration file:
 
 ```
@@ -143,8 +159,16 @@ In this example, we set a default for `optionsFile`, which is used to load a sam
 }
 ```
 
-Here are some examples of the output that results from using the above with various combinations of command line
-parameters and environment variables on a UNIX-like system:
+Note the `gradeNames` parameter refers to the `my.launcher.worker` grade we defined in the same file where we defined
+our launcher grade itself.  The `gradeNames` keyword in a configuration file is the the primary way in which we
+associate our launcher with the component grade(s) to be launched.
+
+As with sub-components, we can have multiple `gradeNames`, which will be merged as they would when instantiating a
+sub-component.  [Grades are merged from left to right](http://docs.fluidproject.org/infusion/development/ComponentGrades.html#combining-grades),
+so that that rightmost grade's options take precedence.
+
+So, assuming the above launcher and configuration file, here are some examples of the output that results when using 
+various combinations of command line parameters and environment variables:
 
 ```
 $ node examples/my-launcher.js
@@ -160,6 +184,7 @@ $ node examples/my-launcher.js --optionsFile "%gpii-launcher/examples/my-alterna
 Var 1: Set in the alternate options file.
 
 ```
+
 # Referencing Deep Variables
 
 By default, yargs supports [using "dot notation" to refer to deep variables](http://yargs.js.org/docs/#parsing-tricks-dot-notation).
