@@ -19,6 +19,8 @@ setup_job:
   script:
     - choco install nodejs.install --version 6.9.1 --forcex86 -y
     - do.ps1 -c "npm install -g node-inspector"
+    # required to avoid problems with esparse
+    - npm config set bin-links false --global
 
 test_job:
   stage: test          # name of the stage
