@@ -32,7 +32,7 @@ grade:
 ```
 yargsOptions: {
     env: true, // Parse environment variables
-    demandOption: ["optionsFile"], // Which arguments are required.
+    demandOption: "optionsFile", // Which arguments are required.
     describe: {
         "optionsFile": "A file to load configuration options from."
     },
@@ -196,7 +196,7 @@ yargsOptions: {
     describe: {
         "deep.path": "A deep path, which is required."
     },
-    demandOption: ["deep.path"]
+    demandOption: "deep.path"
 }
 ```
 You can then pass in an option using a command like `node my-launcher.js --deep.path /tmp`
@@ -248,3 +248,78 @@ command line argument.  Let's say you run a command like the following on a UNIX
 
 Instead of the default behavior, which would result in `myvar` being set to `command-line`, with the settings shown
 above, the value of `myvar` would be `environment` instead.
+
+# Functions that Support Arrays
+
+Many functions provided by yargs support a single argument.  For convenience, most values used as part of the
+`yargsOptions` block (strings, objects, numbers, booleans, functions) are wrapped in an array and treated as the first
+argument to the underlying function.  This allows you to use simple values wherever possible, as in:
+
+```javascript
+fluid.defaults("gpii.launcher.simpleVars", {
+    gradeNames: ["gpii.launcher"],
+    yargsOptions: {
+        // This object is passed to the underlying "describe" method.
+        describe: {
+            foo: "The first field.",
+            bar: "The second."
+        },
+        // This boolean is passed to the underlying "env" method.
+        env: false,
+        // This number is passed to the underlying "wrap" method.
+        wrap: 80
+    }
+});
+```
+
+However, as a byproduct of this, you must use a different syntax to directly pass an array to a yargs function, as shown
+in the following example:
+
+```javascript
+fluid.defaults("gpii.launcher.arrayVars", {
+    gradeNames: ["gpii.launcher"],
+    yargsOptions: {
+        "array": [["arrayVar1", "arrayVar2"]],
+        "demandOption": [["outputFile", "arrayVar1"]],
+        "boolean": [["bool1", "bool2"]],
+        "number": [["num1", "num2"]]
+    }
+});
+```
+
+The same options can be expressed using [the `options` method provided by yargs](http://yargs.js.org/docs/#api-optionskey-opt),
+as shown in the following example:
+
+```javascript
+fluid.defaults("gpii.launcher.optionsObject", {
+    gradeNames: ["gpii.launcher"],
+    yargsOptions: {
+        options: {
+            "arrayVar1": {
+                "array": true,
+                "demandOption": true
+            },
+            "arrayVar2": {
+                "type": "array"
+            },
+            "bool1": {
+                "boolean": true
+            },
+            "bool2": {
+                "type": "boolean"
+            },
+            "num1": {
+                "number": true
+            },
+            "num2": {
+                "type": "number"
+            },
+            "outputFile": {
+                "demandOption": true                
+            }
+        }
+    }
+});
+```
+
+You can choose the format which best fits your needs.
