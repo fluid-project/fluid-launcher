@@ -30,8 +30,11 @@ gpii.tests.launcher.runSingleTest = function (that, testDef) {
 
         child_process.exec(command, execOptions, function (error) {
             jqUnit.start();
-            if (error) {
-                jqUnit.fail(testDef.message + " (error check):" + error);
+            if (testDef.shouldHaveError && error) {
+                jqUnit.assertTrue("The error should be as expected...", error && error.stack && error.stack.substring(testDef.expected) !== -1);
+            }
+            else if (error) {
+                jqUnit.fail(testDef.message + " (error check):\n" + error.stack);
             }
             else {
                 jqUnit.assertLeftHand(testDef.message + " (output check)", testDef.expected, require(outputFile));
@@ -126,6 +129,33 @@ fluid.defaults("gpii.tests.launcher.testRunner", {
             launcherPath: "%gpii-launcher/src/js/wrapper.js",
             args: "--optionsFile %gpii-launcher/tests/data/workerCustomOptions.json",
             expected: { "var1": "Set from a custom options file." }
+        },
+        {
+            message: "GPII-2592: Space-delimited array arguments should be supported...",
+            launcherPath: "%gpii-launcher/tests/js/lib/arrays-harness.js",
+            args: "--arrayVar1 foo bar --arrayVar2=baz qux --arrayVar2 quux",
+            expected: {
+                arrayVar1: ["foo", "bar"],
+                arrayVar2: ["baz", "qux", "quux"]
+            }
+        },
+        {
+            message: "We should be able to (re)configure field options using the `options` construct...",
+            launcherPath: "%gpii-launcher/tests/js/lib/options-harness.js",
+            args: "--arrayVar1 foo bar --arrayVar2 peas --arrayVar2 porridge hot --booleanVar1 true --booleanVar2 false",
+            expected: {
+                arrayVar1: ["foo", "bar"],
+                arrayVar2: ["peas", "porridge", "hot"],
+                booleanVar1: true,
+                booleanVar2: false
+            }
+        },
+        {
+            message: "A required field (added through the options method) should be required...",
+            launcherPath: "%gpii-launcher/tests/js/lib/options-harness.js",
+            args: "",
+            shouldHaveError: true,
+            expected: "Missing required argument: arrayVar1"
         }
     ],
     invokers: {

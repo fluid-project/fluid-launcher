@@ -16,7 +16,7 @@ fluid.defaults("gpii.tests.launcher.harness", {
         defaults: {
             optionsFile: "%gpii-launcher/tests/data/workerDefaults.json"
         },
-        required: ["outputFile"],
+        required: "outputFile",
         coerce: {
             "parsed": JSON.parse
         }
