@@ -1,5 +1,9 @@
 "use strict";
 var fluid  = require("infusion");
+
+// Set a sensible default logging level until our configuration can kick in.
+fluid.setLogLevel(fluid.logLevel.WARN);
+
 var gpii   = fluid.registerNamespace("gpii");
 var kettle = fluid.registerNamespace("kettle");
 
@@ -103,6 +107,9 @@ fluid.defaults("gpii.launcher", {
         },
         coerce: {
             "logLevel": "{that}.expand"
+        },
+        defaults: {
+            "logLevel": "fluid.logLevel.INFO"
         },
         help: true, // Provide a `--help` option that displays our usage information.
         usage: "Usage $0 [options]" // Display a "usage" message if args are missing or incorrect.
