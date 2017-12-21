@@ -2,6 +2,7 @@
 "use strict";
 var fluid             = require("infusion");
 var gpii              = fluid.registerNamespace("gpii");
+var fs                = require("fs");
 var path              = require("path");
 var jqUnit            = require("node-jqunit");
 var os                = require("os");
@@ -37,7 +38,11 @@ gpii.tests.launcher.runSingleTest = function (that, testDef) {
                 jqUnit.fail(testDef.message + " (error check):\n" + error.stack);
             }
             else {
-                jqUnit.assertLeftHand(testDef.message + " (output check)", testDef.expected, require(outputFile));
+                var fileExists = fs.existsSync(outputFile);
+                jqUnit.assertTrue("The output file '" + outputFile + "' should exist.", fileExists);
+                if (fileExists) {
+                    jqUnit.assertLeftHand(testDef.message + " (output check)", testDef.expected, require(outputFile));
+                }
             }
         });
     });

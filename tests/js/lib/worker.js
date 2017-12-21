@@ -16,8 +16,13 @@ fluid.registerNamespace("gpii.tests.launcher.worker");
 gpii.tests.launcher.worker.saveToFile = function (options) {
     var stringifiedJSON = JSON.stringify(options, null, 2);
     console.log(stringifiedJSON);
-    fs.writeFileSync(options.outputFile, stringifiedJSON, "utf8");
-    console.log("Component created with combined options:", stringifiedJSON);
+    try {
+        fs.writeFileSync(options.outputFile, stringifiedJSON, "utf8");
+        console.log("Component created with combined options:", stringifiedJSON);
+    }
+    catch (error) {
+        fluid.fail("Error saving output:\n" + error.stack);
+    }
 };
 
 fluid.defaults("gpii.tests.launcher.worker", {

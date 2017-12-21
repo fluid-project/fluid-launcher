@@ -1,9 +1,5 @@
 "use strict";
 var fluid  = require("infusion");
-
-// Set a sensible default logging level until our configuration can kick in.
-fluid.setLogLevel(fluid.logLevel.WARN);
-
 var gpii   = fluid.registerNamespace("gpii");
 var kettle = fluid.registerNamespace("kettle");
 
@@ -92,32 +88,83 @@ gpii.launcher.resolvePath = function (pathToResolve) {
     return path.resolve(process.cwd(), fluid.module.resolvePath(pathToResolve));
 };
 
+/**
+ *
+ * Generate a simple set of keys to use when filtering incoming arguments.
+ *
+ * @param `yargsOptions` `{Object}` - Configuration options to pass to yargs.
+ * @returns `{Array}` - An array of strings representing the allowed keys based on our `yargsOptions`.
+ *
+ */
+gpii.launcher.generateIncludeKeys = function (yargsOptions) {
+    var discoveredKeyMap = {};
+
+    // Functions accepting arrays
+    fluid.each(["array", "boolean", "demandOption", "number", "string"], function (propertyWithArrayOfKeys) {
+        fluid.each(fluid.makeArray(yargsOptions[propertyWithArrayOfKeys]), function (key) {
+            discoveredKeyMap[key] = true;
+        });
+    });
+
+    // Functions accepting maps
+    fluid.each(["choices", "coerce", "default", "describe", "options"], function (mapProperty) {
+        if (yargsOptions[mapProperty]) {
+            fluid.each(yargsOptions[mapProperty], function (_, key) {
+                discoveredKeyMap[key] = true;
+            });
+        }
+    });
+
+    // Special handling for "alias", which can be called with `["original", "alias"]` or `{ original: "alias"}`.
+    if (yargsOptions.alias) {
+        if (Array.isArray(yargsOptions.alias)) {
+            discoveredKeyMap[yargsOptions.alias[0]] = true;
+        }
+        else {
+            fluid.each(yargsOptions.alias, function (_, key) {
+                discoveredKeyMap[key] = true;
+            });
+        }
+    }
+
+    var keysToInclude = Object.keys(discoveredKeyMap);
+    return keysToInclude;
+};
+
 fluid.defaults("gpii.launcher", {
     gradeNames:  ["fluid.component"],
     filterKeys:  true,
-    logLevel:    true,
-    includeKeys: "@expand:Object.keys({that}.options.yargsOptions.describe)",
+    logLevel:    fluid.logLevel.INFO,
+    includeKeys: "@expand:gpii.launcher.generateIncludeKeys({that}.options.yargsOptions)",
     excludeKeys: ["optionsFile"],
     yargsOptions: {
         env: true, // Parse environment variables
-        demandOption: ["optionsFile"], // Which arguments are required.
-        describe: {
-            "optionsFile": "A file to load configuration options from.",
-            "logLevel": "The Fluid log level to set before launch."
-        },
-        coerce: {
-            "logLevel": "{that}.expand"
-        },
-        defaults: {
-            "logLevel": "fluid.logLevel.INFO"
+        options: {
+            optionsFile: {
+                describe:     "A file to load configuration options from.",
+                demandOption: true,
+                default:      "{that}.options.optionsFile"
+            },
+            logLevel: {
+                describe: "The Fluid log level to set before launch.",
+                coerce:   "{that}.expand",
+                choices:  [
+                    "fluid.logLevel.FATAL",
+                    "fluid.logLevel.FAIL",
+                    "fluid.logLevel.WARN",
+                    "fluid.logLevel.IMPORTANT",
+                    "fluid.logLevel.INFO",
+                    "fluid.logLevel.TRACE"
+                ]
+            }
         },
         help: true, // Provide a `--help` option that displays our usage information.
         usage: "Usage $0 [options]" // Display a "usage" message if args are missing or incorrect.
     },
     listeners: {
-        "onCreate.setLogging": {
+        "onCreate.setLogLevel": {
             priority: "first",
-            funcName: "fluid.setLogging",
+            funcName: "fluid.setLogLevel",
             args:     ["{that}.options.logLevel"]
         },
         "onCreate.launchComponent": {

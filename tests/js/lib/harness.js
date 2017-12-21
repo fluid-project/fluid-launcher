@@ -7,14 +7,12 @@ fluid.require("%gpii-launcher");
 
 fluid.defaults("gpii.tests.launcher.harness", {
     gradeNames: ["gpii.launcher"],
+    optionsFile: "%gpii-launcher/tests/data/workerDefaults.json",
     yargsOptions: {
         describe: {
             "var1":       "An option, set from somewhere.",
             "parsed":     "Model Transformation Rules that should be used to update any matching records.",
             "outputFile": "Where to save our output."
-        },
-        defaults: {
-            optionsFile: "%gpii-launcher/tests/data/workerDefaults.json"
         },
         required: "outputFile",
         coerce: {
