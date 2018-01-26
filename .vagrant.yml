@@ -17,8 +17,7 @@ stages:                # Stages to perform when 'ci test' command is invoked
 setup_job:
   stage: setup
   script:
-    - choco install nodejs.install --version 6.9.1 --forcex86 -y
-    - do.ps1 -c "npm install -g node-inspector"
+    - choco install nodejs-lts -y
     # required to avoid problems with esparse
     - npm config set bin-links false --global
 
