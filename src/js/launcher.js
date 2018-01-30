@@ -63,7 +63,7 @@ gpii.launcher.launchComponent = function (that) {
  * @param includeKeys {Array} - The list of keys to include.
  * @param excludeKeys {Array} - The list of keys to exclude.
  * @param objectToFilter {Object} - The original object to filter.
- * @returns {Object} The filtered object.
+ * @return {Object} The filtered object.
  *
  */
 gpii.launcher.filterKeys = function (includeKeys, excludeKeys, objectToFilter) {
@@ -81,7 +81,7 @@ gpii.launcher.filterKeys = function (includeKeys, excludeKeys, objectToFilter) {
  * Resolve a full, cwd-relative, or package-relative path to a full path.
  *
  * @param pathToResolve {String} - The path to resolve.
- * @returns {String} - The resolved path
+ * @return {String} - The resolved path
  *
  */
 gpii.launcher.resolvePath = function (pathToResolve) {
@@ -92,8 +92,8 @@ gpii.launcher.resolvePath = function (pathToResolve) {
  *
  * Generate a simple set of keys to use when filtering incoming arguments.
  *
- * @param `yargsOptions` `{Object}` - Configuration options to pass to yargs.
- * @returns `{Array}` - An array of strings representing the allowed keys based on our `yargsOptions`.
+ * @param yargsOptions {Object} - Configuration options to pass to yargs.
+ * @return {Array} - An array of strings representing the allowed keys based on our `yargsOptions`.
  *
  */
 gpii.launcher.generateIncludeKeys = function (yargsOptions) {
