@@ -1,11 +1,10 @@
 "use strict";
 var fluid = require("infusion");
-var gpii = fluid.registerNamespace("gpii");
 
 require("./harness");
 
-fluid.defaults("gpii.tests.launcher.arrays", {
-    gradeNames: ["gpii.tests.launcher.harness"],
+fluid.defaults("fluid.tests.launcher.arrays", {
+    gradeNames: ["fluid.tests.launcher.harness"],
     "yargsOptions": {
         "array": [["arrayVar1", "arrayVar2"]],
         "demandOption": [["outputFile", "arrayVar1"]],
@@ -16,10 +15,9 @@ fluid.defaults("gpii.tests.launcher.arrays", {
             "arrayVar2": "The second array-capable field."
         },
         "defaults": {
-            "optionsFile": "%gpii-launcher/tests/data/arrays.json"
+            "optionsFile": "%fluid-launcher/tests/data/arrays.json"
         }
     }
 });
 
-gpii.tests.launcher.arrays();
-
+fluid.tests.launcher.arrays();

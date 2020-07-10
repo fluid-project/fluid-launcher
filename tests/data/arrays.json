@@ -1,8 +1,10 @@
 {
-  "type": "arraySupportOptions",
-  "options": {
-    "arrayVar1": "The default value for arrayVar1 from the options file.",
-    "arrayVar2": "The default value for arrayVar2 from the options file."
-  },
-  "mergeConfigs": ["%gpii-launcher/tests/data/workerDefaults.json"]
+    "type": "arraySupportOptions",
+    "options": {
+        "arrayVar1": "The default value for arrayVar1 from the options file.",
+        "arrayVar2": "The default value for arrayVar2 from the options file."
+    },
+    "mergeConfigs": [
+        "%fluid-launcher/tests/data/workerDefaults.json"
+    ]
 }

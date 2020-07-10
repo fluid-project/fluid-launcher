@@ -1,38 +1,33 @@
 {
-  "name": "gpii-launcher",
-  "version": "1.0.0",
-  "description": "A launcher that merges options from the command line, environment, options files with the launcher defaults.",
-  "main": "index.js",
-  "scripts": {
-    "pretest": "node node_modules/rimraf/bin.js coverage/*",
-    "test": "node node_modules/istanbul/lib/cli.js cover --report none --print none --include-pid tests/js/all-tests.js",
-    "posttest": "node node_modules/istanbul/lib/cli.js report --root coverage --dir reports lcov text-summary"
-  },
-  "bin": "./src/js/wrapper.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/GPII/gpii-launcher.git"
-  },
-  "author": "Tony Atkins <tony@raisingthefloor.org>",
-  "license": "BSD-3-Clause",
-  "bugs": {
-    "url": "https://issues.gpii.net/browse/GPII"
-  },
-  "homepage": "https://github.com/GPII/gpii-launcher/",
-  "dependencies": {
-    "infusion": "3.0.0-dev.20190328T144119Z.ec44dbfab",
-    "kettle": "1.10.1",
-    "yargs": "13.2.4"
-  },
-  "devDependencies": {
-    "eslint": "5.16.0",
-    "eslint-config-fluid": "1.3.0",
-    "fluid-grunt-eslint": "18.1.2",
-    "grunt": "1.0.4",
-    "grunt-jsonlint": "1.1.0",
-    "istanbul": "0.4.5",
-    "jsonlint": "1.6.3",
-    "node-jqunit": "1.1.8",
-    "rimraf": "2.6.3"
-  }
+    "name": "fluid-launcher",
+    "version": "1.0.0",
+    "description": "A launcher that merges options from the command line, environment, options files with the launcher defaults.",
+    "main": "index.js",
+    "scripts": {
+        "pretest": "node node_modules/rimraf/bin.js coverage/*",
+        "test": "node node_modules/istanbul/lib/cli.js cover --report none --print none --include-pid tests/js/all-tests.js",
+        "posttest": "node node_modules/istanbul/lib/cli.js report --root coverage --dir reports lcov text-summary"
+    },
+    "bin": "./src/js/wrapper.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/fluid-project/fluid-launcher.git"
+    },
+    "author": "Tony Atkins <tony@raisingthefloor.org>",
+    "license": "BSD-3-Clause",
+    "homepage": "https://github.com/fluid-project/fluid-launcher/",
+    "dependencies": {
+        "infusion": "3.0.0-dev.20200326T173810Z.24ddb2718",
+        "kettle": "1.12.0",
+        "yargs": "15.4.0"
+    },
+    "devDependencies": {
+        "eslint": "7.4.0",
+        "eslint-config-fluid": "1.4.0",
+        "fluid-grunt-lint-all": "1.0.8",
+        "grunt": "1.2.1",
+        "node-jqunit": "1.1.8",
+        "istanbul": "0.4.5",
+        "rimraf": "3.0.2"
+    }
 }

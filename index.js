@@ -3,4 +3,4 @@ var fluid = require("infusion");
 
 require("./src/js/launcher");
 
-fluid.module.register("gpii-launcher", __dirname, require);
+fluid.module.register("fluid-launcher", __dirname, require);

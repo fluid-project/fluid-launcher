@@ -4,7 +4,7 @@ var fluid = require("infusion");
 fluid.setLogging(true);
 
 var my = fluid.registerNamespace("my");
-fluid.require("%gpii-launcher");
+fluid.require("%fluid-launcher");
 
 fluid.defaults("my.launcher.worker", {
     gradeNames: ["fluid.component"],
@@ -24,14 +24,14 @@ fluid.defaults("my.launcher.worker", {
 fluid.registerNamespace("my.launcher");
 
 fluid.defaults("my.launcher", {
-    gradeNames: ["gpii.launcher"],
+    gradeNames: ["fluid.launcher"],
     filterKeys: false,
     yargsOptions: {
         describe: {
             "var1": "you can set this option"
         },
         defaults: {
-            "optionsFile": "%gpii-launcher/examples/my-launcher-config.json"
+            "optionsFile": "%fluid-launcher/examples/my-launcher-config.json"
         }
     }
 });

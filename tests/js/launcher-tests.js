@@ -1,20 +1,19 @@
 // Tests that launch the launcher with various options, while collecting istanbul code coverage reporting.
 "use strict";
 var fluid             = require("infusion");
-var gpii              = fluid.registerNamespace("gpii");
 var fs                = require("fs");
 var path              = require("path");
 var jqUnit            = require("node-jqunit");
 var os                = require("os");
 var child_process     = require("child_process");
-var istanbulPath      = fluid.module.resolvePath("%gpii-launcher/node_modules/istanbul/lib/cli.js");
-var launcherPath      = fluid.module.resolvePath("%gpii-launcher/tests/js/lib/harness-launcher.js");
-var coverageOutputDir = fluid.module.resolvePath("%gpii-launcher/coverage");
-var optionsFile       = fluid.module.resolvePath("%gpii-launcher/tests/data/workerCustomOptions.json");
+var istanbulPath      = fluid.module.resolvePath("%fluid-launcher/node_modules/istanbul/lib/cli.js");
+var launcherPath      = fluid.module.resolvePath("%fluid-launcher/tests/js/lib/harness-launcher.js");
+var coverageOutputDir = fluid.module.resolvePath("%fluid-launcher/coverage");
+var optionsFile       = fluid.module.resolvePath("%fluid-launcher/tests/data/workerCustomOptions.json");
 
-fluid.registerNamespace("gpii.tests.launcher");
+fluid.registerNamespace("fluid.tests.launcher");
 
-gpii.tests.launcher.runSingleTest = function (that, testDef) {
+fluid.tests.launcher.runSingleTest = function (that, testDef) {
     jqUnit.test(testDef.message, function () {
         jqUnit.stop();
         var outputFile = path.resolve(os.tmpdir(), that.id + "-" + Date.now() + "-" + Math.round(Math.random() * 1000) + ".json");
@@ -25,7 +24,7 @@ gpii.tests.launcher.runSingleTest = function (that, testDef) {
         var command = fluid.stringTemplate("node %istanbulPath cover --print none --report none --include-pid --dir %coverageOutputDir %launcherPath -- %args --outputFile %outputFile", commandOptions);
 
         var execOptions = {
-            cwd: fluid.module.resolvePath("%gpii-launcher"),
+            cwd: fluid.module.resolvePath("%fluid-launcher"),
             env: testDef.env || {}
         };
 
@@ -48,7 +47,7 @@ gpii.tests.launcher.runSingleTest = function (that, testDef) {
     });
 };
 
-fluid.defaults("gpii.tests.launcher.testRunner", {
+fluid.defaults("fluid.tests.launcher.testRunner", {
     gradeNames: ["fluid.component"],
     testDefs: [
         {
@@ -73,19 +72,19 @@ fluid.defaults("gpii.tests.launcher.testRunner", {
         },
         {
             message: "Options should be loaded correctly from an options file (package-relative path)...",
-            args: "--optionsFile %gpii-launcher/tests/data/workerCustomOptions.json",
+            args: "--optionsFile %fluid-launcher/tests/data/workerCustomOptions.json",
             expected: { "var1": "Set from a custom options file." }
         },
         {
             message: "Arbitrary options not referenced in the yargs config should be settable from an options file...",
-            args: "--optionsFile %gpii-launcher/tests/data/workerCustomOptions.json",
+            args: "--optionsFile %fluid-launcher/tests/data/workerCustomOptions.json",
             expected: {
                 "additionalOption": true
             }
         },
         {
             message: "Options should be loaded correctly from an options file (environment variable)...",
-            env: { optionsFile: "%gpii-launcher/tests/data/workerCustomOptions.json"},
+            env: { optionsFile: "%fluid-launcher/tests/data/workerCustomOptions.json"},
             expected: { "var1": "Set from a custom options file." }
         },
         {
@@ -108,7 +107,7 @@ fluid.defaults("gpii.tests.launcher.testRunner", {
         },
         {
             message: "We should be able to pull specific environment variables and arguments into our config...",
-            args: "--optionsFile %gpii-launcher/tests/data/pullWorker.json --var1 command-line",
+            args: "--optionsFile %fluid-launcher/tests/data/pullWorker.json --var1 command-line",
             env: { var1: "environnment variable"},
             expected: {
                 var1:    "command-line",
@@ -117,7 +116,7 @@ fluid.defaults("gpii.tests.launcher.testRunner", {
         },
         {
             message: "A launcher with filterKeys set to false should allow all environment variables and arguments...",
-            launcherPath: "%gpii-launcher/tests/js/lib/unfettered-harness-launcher.js",
+            launcherPath: "%fluid-launcher/tests/js/lib/unfettered-harness-launcher.js",
             env: { env1: "arbitrary environment variable"},
             args: "--arg1 \"arbitrary argument\"",
             expected: {
@@ -131,13 +130,13 @@ fluid.defaults("gpii.tests.launcher.testRunner", {
         },
         {
             message:      "The standalone `wrapper` launcher should be able to load a config with arguments....",
-            launcherPath: "%gpii-launcher/src/js/wrapper.js",
-            args: "--optionsFile %gpii-launcher/tests/data/workerCustomOptions.json",
+            launcherPath: "%fluid-launcher/src/js/wrapper.js",
+            args: "--optionsFile %fluid-launcher/tests/data/workerCustomOptions.json",
             expected: { "var1": "Set from a custom options file." }
         },
         {
-            message: "GPII-2592: Space-delimited array arguments should be supported...",
-            launcherPath: "%gpii-launcher/tests/js/lib/arrays-harness.js",
+            message: "fluid-2592: Space-delimited array arguments should be supported...",
+            launcherPath: "%fluid-launcher/tests/js/lib/arrays-harness.js",
             args: "--arrayVar1 foo bar --arrayVar2=baz qux --arrayVar2 quux",
             expected: {
                 arrayVar1: ["foo", "bar"],
@@ -146,7 +145,7 @@ fluid.defaults("gpii.tests.launcher.testRunner", {
         },
         {
             message: "We should be able to (re)configure field options using the `options` construct...",
-            launcherPath: "%gpii-launcher/tests/js/lib/options-harness.js",
+            launcherPath: "%fluid-launcher/tests/js/lib/options-harness.js",
             args: "--arrayVar1 foo bar --arrayVar2 peas --arrayVar2 porridge hot --booleanVar1 true --booleanVar2 false",
             expected: {
                 arrayVar1: ["foo", "bar"],
@@ -157,7 +156,7 @@ fluid.defaults("gpii.tests.launcher.testRunner", {
         },
         {
             message: "A required field (added through the options method) should be required...",
-            launcherPath: "%gpii-launcher/tests/js/lib/options-harness.js",
+            launcherPath: "%fluid-launcher/tests/js/lib/options-harness.js",
             args: "",
             shouldHaveError: true,
             expected: "Missing required argument: arrayVar1"
@@ -165,7 +164,7 @@ fluid.defaults("gpii.tests.launcher.testRunner", {
     ],
     invokers: {
         runSingleTest: {
-            funcName: "gpii.tests.launcher.runSingleTest",
+            funcName: "fluid.tests.launcher.runSingleTest",
             args:     ["{that}", "{arguments}.0"]
         }
     },
@@ -177,4 +176,4 @@ fluid.defaults("gpii.tests.launcher.testRunner", {
     }
 });
 
-gpii.tests.launcher.testRunner();
+fluid.tests.launcher.testRunner();
