@@ -1,0 +1,7 @@
+{
+  "type": "altLauncherConfig",
+  "options": {
+    "gradeNames": ["my.launcher.worker"],
+    "var1": "set in the alternate options file."
+  }
+}

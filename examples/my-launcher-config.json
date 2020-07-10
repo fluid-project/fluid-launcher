@@ -1,0 +1,7 @@
+{
+  "type": "launcherConfig",
+  "options": {
+    "gradeNames": ["my.launcher.worker"],
+    "var1": "Set in the options file."
+  }
+}
