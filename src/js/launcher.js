@@ -1,6 +1,5 @@
 "use strict";
 var fluid  = require("infusion");
-var gpii   = fluid.registerNamespace("gpii");
 var kettle = fluid.registerNamespace("kettle");
 
 fluid.require("%kettle/lib/KettleConfigLoader.js");
@@ -10,20 +9,20 @@ var path    = require("path");
 var process = require("process");
 
 // A global resolver that can be used to pull raw environment variables from configuration blocks.
-fluid.defaults("gpii.launcher.resolver", {
+fluid.defaults("fluid.launcher.resolver", {
     gradeNames: ["fluid.component", "fluid.resolveRootSingle"],
-    singleRootType: "gpii.launcher.resolver",
+    singleRootType: "fluid.launcher.resolver",
     members: {
         env:  process.env
     }
 });
 
-// Create an instance of gpii.resolvers.env
+// Create an instance of fluid.resolvers.env
 fluid.construct("gpii_launcher_resolver", {
-    type: "gpii.launcher.resolver"
+    type: "fluid.launcher.resolver"
 });
 
-fluid.registerNamespace("gpii.launcher");
+fluid.registerNamespace("fluid.launcher");
 
 /**
  *
@@ -33,10 +32,11 @@ fluid.registerNamespace("gpii.launcher");
  * 2. Environment variables.
  * 3. Command line parameters.
  *
- * @param that - The `gpii.launcher` component itself.
+ * @param {Object} that - The `fluid.launcher` component itself.
+ * @return {Any} - The return value from the invoked function.
  *
  */
-gpii.launcher.launchComponent = function (that) {
+fluid.launcher.launchComponent = function (that) {
     fluid.each(that.options.yargsOptions, function (fnArgs, fnName) {
         yargs[fnName].apply(yargs, fluid.makeArray(fnArgs));
     });
@@ -46,7 +46,7 @@ gpii.launcher.launchComponent = function (that) {
 
     var paramAndEnvironmentOptions = that.options.filterKeys ? that.filterKeys(args) : args;
 
-    var fullPath   = gpii.launcher.resolvePath(args.optionsFile);
+    var fullPath   = fluid.launcher.resolvePath(args.optionsFile);
     var configPath = path.dirname(fullPath);
     var configName = path.basename(fullPath, ".json");
 
@@ -60,13 +60,13 @@ gpii.launcher.launchComponent = function (that) {
  *
  * Filter an object by a list of keys to include and/or a list of keys to exclude.
  *
- * @param includeKeys {Array} - The list of keys to include.
- * @param excludeKeys {Array} - The list of keys to exclude.
- * @param objectToFilter {Object} - The original object to filter.
+ * @param {Array} includeKeys - The list of keys to include.
+ * @param {Array} excludeKeys - The list of keys to exclude.
+ * @param {Object} objectToFilter - The original object to filter.
  * @return {Object} The filtered object.
  *
  */
-gpii.launcher.filterKeys = function (includeKeys, excludeKeys, objectToFilter) {
+fluid.launcher.filterKeys = function (includeKeys, excludeKeys, objectToFilter) {
     var filteredResults = fluid.copy(objectToFilter);
 
     filteredResults = includeKeys ? fluid.filterKeys(filteredResults, includeKeys) : filteredResults;
@@ -80,11 +80,11 @@ gpii.launcher.filterKeys = function (includeKeys, excludeKeys, objectToFilter) {
  *
  * Resolve a full, cwd-relative, or package-relative path to a full path.
  *
- * @param pathToResolve {String} - The path to resolve.
+ * @param {String} pathToResolve - The path to resolve.
  * @return {String} - The resolved path
  *
  */
-gpii.launcher.resolvePath = function (pathToResolve) {
+fluid.launcher.resolvePath = function (pathToResolve) {
     return path.resolve(process.cwd(), fluid.module.resolvePath(pathToResolve));
 };
 
@@ -92,11 +92,11 @@ gpii.launcher.resolvePath = function (pathToResolve) {
  *
  * Generate a simple set of keys to use when filtering incoming arguments.
  *
- * @param yargsOptions {Object} - Configuration options to pass to yargs.
+ * @param {Object} yargsOptions - Configuration options to pass to yargs.
  * @return {Array} - An array of strings representing the allowed keys based on our `yargsOptions`.
  *
  */
-gpii.launcher.generateIncludeKeys = function (yargsOptions) {
+fluid.launcher.generateIncludeKeys = function (yargsOptions) {
     var discoveredKeyMap = {};
 
     // Functions accepting arrays
@@ -131,11 +131,11 @@ gpii.launcher.generateIncludeKeys = function (yargsOptions) {
     return keysToInclude;
 };
 
-fluid.defaults("gpii.launcher", {
+fluid.defaults("fluid.launcher", {
     gradeNames:  ["fluid.component"],
     filterKeys:  true,
     logLevel:    fluid.logLevel.INFO,
-    includeKeys: "@expand:gpii.launcher.generateIncludeKeys({that}.options.yargsOptions)",
+    includeKeys: "@expand:fluid.launcher.generateIncludeKeys({that}.options.yargsOptions)",
     excludeKeys: ["optionsFile"],
     yargsOptions: {
         env: true, // Parse environment variables
@@ -168,13 +168,13 @@ fluid.defaults("gpii.launcher", {
             args:     ["{that}.options.logLevel"]
         },
         "onCreate.launchComponent": {
-            funcName: "gpii.launcher.launchComponent",
+            funcName: "fluid.launcher.launchComponent",
             args:     ["{that}"]
         }
     },
     invokers: {
         filterKeys: {
-            funcName: "gpii.launcher.filterKeys",
+            funcName: "fluid.launcher.filterKeys",
             args: ["{that}.options.includeKeys", "{that}.options.excludeKeys", "{arguments}.0"]
         },
         expand: {

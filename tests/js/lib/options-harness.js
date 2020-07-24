@@ -1,11 +1,10 @@
 "use strict";
 var fluid = require("infusion");
-var gpii = fluid.registerNamespace("gpii");
 
 require("./harness");
 
-fluid.defaults("gpii.tests.launcher.optionsHarness", {
-    gradeNames: ["gpii.tests.launcher.harness"],
+fluid.defaults("fluid.tests.launcher.optionsHarness", {
+    gradeNames: ["fluid.tests.launcher.harness"],
     includeKeys: "@expand:Object.keys({that}.options.yargsOptions.options)",
     "yargsOptions": {
         "options": {
@@ -31,5 +30,4 @@ fluid.defaults("gpii.tests.launcher.optionsHarness", {
     }
 });
 
-gpii.tests.launcher.optionsHarness();
-
+fluid.tests.launcher.optionsHarness();

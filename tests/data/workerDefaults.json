@@ -1,7 +1,11 @@
 {
-  "type": "workerDefaults",
-  "options": {
-    "gradeNames": ["gpii.tests.launcher.worker"]
-  },
-  "require": ["%gpii-launcher/tests/js/lib/worker.js"]
+    "type": "workerDefaults",
+    "options": {
+        "gradeNames": [
+            "fluid.tests.launcher.worker"
+        ]
+    },
+    "require": [
+        "%fluid-launcher/tests/js/lib/worker.js"
+    ]
 }

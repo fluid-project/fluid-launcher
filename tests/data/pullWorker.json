@@ -1,8 +1,12 @@
 {
-  "type": "workerPullingOptions",
-  "options": {
-    "gradeNames": ["gpii.tests.launcher.worker"],
-    "envVar1":    "{gpii.launcher.resolver}.env.var1"
-  },
-  "mergeConfigs": ["%gpii-launcher/tests/data/workerDefaults.json"]
+    "type": "workerPullingOptions",
+    "options": {
+        "gradeNames": [
+            "fluid.tests.launcher.worker"
+        ],
+        "envVar1": "{fluid.launcher.resolver}.env.var1"
+    },
+    "mergeConfigs": [
+        "%fluid-launcher/tests/data/workerDefaults.json"
+    ]
 }

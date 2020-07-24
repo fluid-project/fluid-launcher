@@ -3,11 +3,11 @@
 */
 "use strict";
 var fluid = require("infusion");
-fluid.require("%gpii-launcher");
+fluid.require("%fluid-launcher");
 
-fluid.defaults("gpii.tests.launcher.harness", {
-    gradeNames: ["gpii.launcher"],
-    optionsFile: "%gpii-launcher/tests/data/workerDefaults.json",
+fluid.defaults("fluid.tests.launcher.harness", {
+    gradeNames: ["fluid.launcher"],
+    optionsFile: "%fluid-launcher/tests/data/workerDefaults.json",
     yargsOptions: {
         describe: {
             "var1":       "An option, set from somewhere.",

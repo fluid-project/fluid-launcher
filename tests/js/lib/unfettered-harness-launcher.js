@@ -2,13 +2,12 @@
 // the "unfettered" tests.
 "use strict";
 var fluid = require("infusion");
-var gpii  = fluid.registerNamespace("gpii");
 
 require("./harness");
 
-fluid.defaults("gpii.tests.launcher.unfetteredHarness", {
-    gradeNames: ["gpii.tests.launcher.harness"],
+fluid.defaults("fluid.tests.launcher.unfetteredHarness", {
+    gradeNames: ["fluid.tests.launcher.harness"],
     filterKeys: false
 });
 
-gpii.tests.launcher.unfetteredHarness();
+fluid.tests.launcher.unfetteredHarness();

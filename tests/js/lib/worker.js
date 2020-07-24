@@ -5,32 +5,30 @@
  */
 "use strict";
 var fluid = require("infusion");
-
-var gpii  = fluid.registerNamespace("gpii");
 var fs    = require("fs");
 
-fluid.require("%gpii-launcher");
+fluid.require("%fluid-launcher");
 
-fluid.registerNamespace("gpii.tests.launcher.worker");
+fluid.registerNamespace("fluid.tests.launcher.worker");
 
-gpii.tests.launcher.worker.saveToFile = function (options) {
+fluid.tests.launcher.worker.saveToFile = function (options) {
     var stringifiedJSON = JSON.stringify(options, null, 2);
-    console.log(stringifiedJSON);
+    fluid.log(stringifiedJSON);
     try {
         fs.writeFileSync(options.outputFile, stringifiedJSON, "utf8");
-        console.log("Component created with combined options:", stringifiedJSON);
+        fluid.log("Component created with combined options:", stringifiedJSON);
     }
     catch (error) {
         fluid.fail("Error saving output:\n" + error.stack);
     }
 };
 
-fluid.defaults("gpii.tests.launcher.worker", {
+fluid.defaults("fluid.tests.launcher.worker", {
     gradeNames: ["fluid.component"],
     var1: "set in the component",
     listeners: {
         "onCreate.saveToFile": {
-            funcName: "gpii.tests.launcher.worker.saveToFile",
+            funcName: "fluid.tests.launcher.worker.saveToFile",
             args: ["{that}.options"]
         },
         "onCreate.destroy": {
