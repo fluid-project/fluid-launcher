@@ -67,7 +67,7 @@ fluid.defaults("my.launcher", {
 });
 ```
 
-The contents of this file will be loaded using the [configuration loading built into kettle](https://github.com/fluid-project/kettle/blob/master/docs/ConfigsAndApplications.md).
+The contents of this file will be loaded using the [configuration loading built into kettle](https://github.com/fluid-project/kettle/blob/main/docs/ConfigsAndApplications.md).
 The file is expected to correspond roughly to a component definition, but supports additional options for including
 other configuration files.
 
@@ -79,7 +79,7 @@ be a part of the constructed grade name, and will appear in log messages, so a u
 options are being used for a given launch.  If `type` is omitted, it will be replace with a generated ID, which makes
 troubleshooting more difficult.
 
-See [the kettle documentation](https://github.com/fluid-project/kettle/blob/master/docs/ConfigsAndApplications.md#structure-of-a-kettle-config
+See [the kettle documentation](https://github.com/fluid-project/kettle/blob/main/docs/ConfigsAndApplications.md#structure-of-a-kettle-config
 ) for more details about the configuration file format, including the special keywords that support merging material
 from other configuration files.
 
